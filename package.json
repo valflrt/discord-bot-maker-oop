@@ -1,0 +1,19 @@
+{
+  "name": "discord-bot-oop",
+  "version": "1.0.0",
+  "description": "Simple oop discord bot manager",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valflrt/discord-bot-oop.git"
+  },
+  "author": "valflrt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valflrt/discord-bot-oop/issues"
+  },
+  "homepage": "https://github.com/valflrt/discord-bot-oop#readme"
+}
