@@ -4,7 +4,7 @@
   "description": "Simple oop discord bot manager",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npx nodemon"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/valflrt/discord-bot-oop/issues"
   },
-  "homepage": "https://github.com/valflrt/discord-bot-oop#readme"
+  "homepage": "https://github.com/valflrt/discord-bot-oop#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
 }
