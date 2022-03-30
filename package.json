@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/valflrt/discord-bot-oop#readme",
   "dependencies": {
-    "@valflrt/discord-bot-oop": "github:valflrt/discord-bot-oop",
     "camelcase": "^6.3.0",
     "discord.js": "^13.6.0"
   },
