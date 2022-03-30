@@ -2,7 +2,7 @@
   "name": "@valflrt/discord-bot-oop",
   "version": "1.0.0",
   "description": "Simple oop discord bot manager",
-  "main": "./build/index.ts",
+  "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
     "example": "npx nodemon",
