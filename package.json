@@ -2,9 +2,11 @@
   "name": "discord-bot-oop",
   "version": "1.0.0",
   "description": "Simple oop discord bot manager",
-  "main": "src/index.ts",
+  "main": "build/index.ts",
+  "types": "build/index.d.ts",
   "scripts": {
-    "dev": "npx nodemon"
+    "example": "npx nodemon",
+    "build": "npx tsc"
   },
   "repository": {
     "type": "git",
