@@ -1,8 +1,12 @@
 import camelCase from "camelcase";
 
 import { Bot } from "./Bot";
+import { Context } from "./Context";
 
-export type CommandExecutionFunction = (context: any, bot: Bot) => Promise<any>;
+export type CommandExecutionFunction = (
+  context: Context,
+  bot: Bot
+) => Promise<any>;
 
 export interface CommandConfig {
   identifier?: string;
@@ -24,7 +28,7 @@ export interface CommandDeclaration {
 
   aliases: string[];
 
-  execution: CommandExecutionFunction;
+  execute: CommandExecutionFunction;
 
   parent: Command | null;
   commands: Command[];
@@ -37,7 +41,7 @@ export class Command implements CommandDeclaration {
 
   public aliases: string[];
 
-  public execution: CommandExecutionFunction;
+  public execute: CommandExecutionFunction;
 
   public parent: Command | null;
   public commands: Command[];
@@ -51,7 +55,7 @@ export class Command implements CommandDeclaration {
 
     this.aliases = declaration.aliases ?? [];
 
-    this.execution = declaration.execution;
+    this.execute = declaration.execution;
 
     this.commands = declaration.commands
       ? declaration.commands.map((c) => new Command({ ...c, parent: this }))

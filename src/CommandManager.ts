@@ -1,22 +1,30 @@
-import { Command } from "./Command";
+import { Command, CommandConfig } from "./Command";
 
 export interface CommandManagerConfig {
-  commands: Command[];
+  prefix: string;
+  commands: CommandConfig[];
 }
 
 export class CommandManager {
   public commands: Command[];
 
+  private _prefix: string;
+
   constructor(config: CommandManagerConfig) {
-    this.commands = config.commands;
+    this._prefix = config.prefix;
+    this.commands = config.commands.map((c) => new Command(c));
   }
 
   /**
-   * Finds and returns a command in the list using a "command pattern"
-   * If the command isn't found, returns null
-   * @param pattern command call pattern
+   * Parses the given text (message content), finds and returns a command in the list
+   * using a "command pattern" If the command isn't found, returns null
+   * @param text text to parse
    */
-  public find(pattern: string[]): Command | null {
+  public parseTextAndFindCommand(text: string): Command | null {
+    let pattern = text
+      .replace(new RegExp(`(^${this._prefix})|( .*$)`, "g"), "")
+      .trim()
+      .split(/(?!^)\.(?!$)/g);
     const loop = (currentLevel: Command[] = [], i: number): Command | null => {
       let command = currentLevel.find((c) => c.equals(pattern[i]));
       if (i === pattern.length - 1 && command) return command!;
