@@ -10,4 +10,8 @@ export class PluginManager {
   constructor(config: PluginManagerConfig) {
     this.plugins = config.plugins.map((p) => new Plugin(p));
   }
+
+  /**
+   * TODO: Add client setup method
+   */
 }

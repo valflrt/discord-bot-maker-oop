@@ -3,7 +3,11 @@ import { Client, IntentsString } from "discord.js";
 import { CommandManager } from "./CommandManager";
 import { CommandConfig } from "./Command";
 
-import { AnyObject, TimeStamp } from "./misc";
+import { PluginManager } from "./PluginManager";
+import { Plugin, PluginConfig } from "./Plugin";
+
+import { TimeStamp } from "./misc";
+import { AnyObject } from "./types";
 
 export interface BotConfig {
   token: string;
@@ -14,6 +18,7 @@ export interface BotConfig {
   intents: IntentsString[];
 
   commands?: CommandConfig[];
+  plugins?: PluginConfig[];
 }
 
 export interface BotDeclaration {
@@ -31,6 +36,7 @@ export class Bot implements BotDeclaration {
 
   private _client: Client;
   private _commandManager: CommandManager;
+  private _pluginManager: PluginManager;
 
   constructor(config: BotConfig) {
     this.token = config.token;
@@ -43,6 +49,10 @@ export class Bot implements BotDeclaration {
     this._commandManager = new CommandManager({
       prefix: this.prefix,
       commands: config.commands ?? [],
+    });
+
+    this._pluginManager = new PluginManager({
+      plugins: config.plugins ?? [],
     });
   }
 
@@ -57,22 +67,33 @@ export class Bot implements BotDeclaration {
     await new Promise((r) => this._client.on("ready", r));
     console.log(`The bot is now ready (took ${timestamp.elapsedTime}ms)`);
 
-    this._client.on("messageCreate", (message) => {
-      // Skips if the message doesn't start with the prefix
-      if (!message.content.startsWith(this.prefix)) return;
+    this._pluginManager.plugins.push(
+      new Plugin({
+        name: "CommandCallPlugin",
+        events: {
+          on: {
+            messageCreate: [
+              (message) => {
+                // Skips if the message doesn't start with the prefix
+                if (!message.content.startsWith(this.prefix)) return;
 
-      let command = this._commandManager.parseTextAndFindCommand(
-        message.content
-      );
-      // Skips if no command has been found
-      if (!command) return;
+                let command = this._commandManager.parseTextAndFindCommand(
+                  message.content
+                );
+                // Skips if no command has been found
+                if (!command) return;
 
-      command.execute(
-        {
-          message,
+                command.execute(
+                  {
+                    message,
+                  },
+                  this
+                );
+              },
+            ],
+          },
         },
-        this
-      );
-    });
+      })
+    );
   }
 }
