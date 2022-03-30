@@ -1,10 +1,10 @@
-import Command from "./Command";
+import { Command } from "./Command";
 
 export interface CommandManagerConfig {
   commands: Command[];
 }
 
-export default class CommandManager {
+export class CommandManager {
   public commands: Command[];
 
   constructor(config: CommandManagerConfig) {

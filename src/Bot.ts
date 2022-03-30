@@ -1,7 +1,7 @@
 import { Client, IntentsString } from "discord.js";
 
-import CommandManager from "./CommandManager";
-import Command from "./Command";
+import { CommandManager } from "./CommandManager";
+import { Command } from "./Command";
 
 import { AnyObject } from "./misc";
 
@@ -16,7 +16,7 @@ export interface BotConfig {
   commands?: Command[];
 }
 
-export default class Bot {
+export class Bot {
   public prefix: string;
   public constants: AnyObject;
 

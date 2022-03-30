@@ -1,6 +1,6 @@
 import camelCase from "camelcase";
 
-import Bot from "./Bot";
+import { Bot } from "./Bot";
 
 export type CommandExecutionFunction = (context: any, bot: Bot) => Promise<any>;
 
@@ -30,7 +30,7 @@ export interface CommandDeclaration {
   commands: Command[];
 }
 
-export default class Command implements CommandDeclaration {
+export class Command implements CommandDeclaration {
   public identifier: string;
   public name: string;
   public description: string;
