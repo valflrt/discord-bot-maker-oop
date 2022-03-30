@@ -1,15 +1,42 @@
+import { ClientEvents } from "discord.js";
 import { randomUUID } from "crypto";
-import { ClientEvents, Message } from "discord.js";
 
+import { EventTypes } from "./types";
+
+/**
+ * PluginEvents object declaration
+ *
+ * Example:
+ *
+ * ```typescript
+ * {
+ *   once: {
+ *     ready: [
+ *       async () => console.log("ready !")
+ *     ],
+ *   },
+ *   on: {
+ *     messageCreate: [
+ *       async (message) => message.channel.send("blop")
+ *     ],
+ *   }
+ * }
+ * ```
+ */
 export type PluginEvents = {
-  [T in keyof ClientEvents]: ((
-    ...args: ClientEvents[T]
-  ) => Promise<any> | any)[];
+  [EventType in EventTypes]?: {
+    [Event in keyof ClientEvents]?: ((
+      ...args: ClientEvents[Event]
+    ) => Promise<any> | any)[];
+  };
 };
 
+/**
+ * Plugin configuration declaration
+ */
 export interface PluginConfig {
   name: string;
-  events: PluginEvents;
+  events?: PluginEvents;
 }
 
 export interface PluginDeclaration {
@@ -19,11 +46,14 @@ export interface PluginDeclaration {
   events: PluginEvents;
 }
 
+/**
+ * Plugin class, used to create plugins
+ */
 export class Plugin implements PluginDeclaration {
-  id: string;
-  name: string;
+  public id: string;
+  public name: string;
 
-  events: PluginEvents;
+  public events: PluginEvents;
 
   constructor(config: PluginConfig) {
     this.id = randomUUID();

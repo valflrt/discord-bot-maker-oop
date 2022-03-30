@@ -1,5 +1,3 @@
-export type AnyObject = { [key: string]: any };
-
 export class TimeStamp {
   private time: number;
 
