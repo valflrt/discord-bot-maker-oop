@@ -6,7 +6,8 @@
   "types": "build/index.d.ts",
   "scripts": {
     "example": "npx nodemon",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "install": "npm run build"
   },
   "repository": {
     "type": "git",
