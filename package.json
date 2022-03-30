@@ -7,7 +7,7 @@
   "scripts": {
     "example": "npx nodemon",
     "build": "npx tsc",
-    "prepare": "npm run build"
+    "preinstall": "npm run build"
   },
   "repository": {
     "type": "git",
