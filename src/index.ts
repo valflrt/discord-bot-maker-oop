@@ -1,8 +1,8 @@
 export * from "./Bot";
 
-export * from "./Command";
-export * from "./Commands";
-export * from "./CommandManager";
+export * from "./commands/Command";
+export * from "./commands/Commands";
+export * from "./commands/CommandManager";
 
 export * from "./Context";
 
