@@ -1,7 +1,7 @@
 import camelCase from "camelcase";
 
-import { Bot } from "./Bot";
-import { Context } from "./Context";
+import { Bot } from "../Bot";
+import { Context } from "../Context";
 
 export type CommandExecutionFunction = (
   context: Context,
