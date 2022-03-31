@@ -19,3 +19,13 @@ export class TimeStamp {
     return Date.now() - this.time;
   }
 }
+
+export let sanitize = (string: string) =>
+  string
+    /**
+     * the two following lines remove accented characters
+     * (found it on stack overflow TvT)
+     */
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
