@@ -6,20 +6,21 @@ import {
   ReplyMessageOptions,
 } from "discord.js";
 
+import { Base, BaseConfig } from "../Base";
+
 import { Context } from "../Context";
 
-import { SentMessageActions } from "./SentMessageActions";
-
-export interface MessageActionsConfig {
+export interface MessageActionsConfig extends BaseConfig {
   context: Context;
   embed: MessageEmbed;
 }
 
-export class MessageActions {
+export class MessageActions extends Base {
   protected embed: MessageEmbed;
   protected context: Context;
 
   constructor(config: MessageActionsConfig) {
+    super(config);
     this.embed = config.embed;
     this.context = config.context;
   }
@@ -69,7 +70,7 @@ export class MessageActions {
    * @param content text to send as the description of the MessageEmbed
    */
   public returnTextEmbed = (content: string): MessageEmbed => {
-    return this.context.embed.setDescription(content);
+    return this.context.bot.settings.baseEmbed.setDescription(content);
   };
 
   /**
@@ -91,7 +92,7 @@ export class MessageActions {
   public returnCustomEmbed = (
     setup: (embed: MessageEmbed) => MessageEmbed
   ): MessageEmbed => {
-    return setup(this.context.embed);
+    return setup(this.context.bot.settings.baseEmbed);
   };
 
   /**
@@ -99,9 +100,59 @@ export class MessageActions {
    * @param message message which to attach to
    */
   protected attachSentMessageActions(message: Message) {
+    let newContext = this.context;
+    newContext.message = message;
     return new SentMessageActions({
-      context: this.context,
+      context: newContext,
       embed: this.embed,
+      bot: this.bot,
     });
+  }
+}
+
+export class SentMessageActions extends MessageActions {
+  public message: Message;
+
+  constructor(config: MessageActionsConfig) {
+    super(config);
+    this.message = config.context.message;
+  }
+
+  /**
+   * Edits a sent message with an embed
+   * @param embed embed to edit the message with
+   * @param options optional – message edit options
+   */
+  public editWithEmbed = async (
+    embed: MessageEmbed,
+    options: MessageEditOptions = {}
+  ): Promise<SentMessageActions> => {
+    if (!options.embeds) options.embeds = [];
+    options.embeds.push(embed);
+    return this.attachSentMessageActions(await this.message.edit(options));
+  };
+
+  /**
+   * Edits a sent message with a text embed
+   * @param text Text to use in the embed
+   * @param options optional – message edit options
+   */
+  public editWithTextEmbed(
+    text: string,
+    options: MessageEditOptions = {}
+  ): Promise<SentMessageActions> {
+    return this.editWithEmbed(this.returnTextEmbed(text), options);
+  }
+
+  /**
+   * Edits a sent message with a custom embed
+   * @param setup callback to set up the custom embed
+   * @param options optional – message edit options
+   */
+  public editWithCustomEmbed(
+    setup: (embed: MessageEmbed) => MessageEmbed,
+    options: MessageEditOptions = {}
+  ): Promise<SentMessageActions> {
+    return this.editWithEmbed(this.returnCustomEmbed(setup), options);
   }
 }
