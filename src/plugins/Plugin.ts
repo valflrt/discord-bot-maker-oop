@@ -1,7 +1,16 @@
 import { ClientEvents } from "discord.js";
-import { randomUUID } from "crypto";
 
-import { EventTypes } from "./types";
+import { Bot } from "../Bot";
+
+import { EventTypes } from "../types";
+
+export type PluginEventListener<EventName extends keyof ClientEvents> = (
+  ...args: ClientEvents[EventName]
+) => Promise<any> | any;
+
+export type PluginEventListenerNotGeneric = (
+  ...args: ClientEvents[keyof ClientEvents]
+) => Promise<any> | any;
 
 /**
  * PluginEvents object declaration
@@ -11,23 +20,17 @@ import { EventTypes } from "./types";
  * ```typescript
  * {
  *   once: {
- *     ready: [
- *       async () => console.log("ready !")
- *     ],
+ *     ready: async () => console.log("ready !"),
  *   },
  *   on: {
- *     messageCreate: [
- *       async (message) => message.channel.send("blop")
- *     ],
+ *     messageCreate: async (message) => message.channel.send("blop"),
  *   }
  * }
  * ```
  */
 export type PluginEvents = {
   [EventType in EventTypes]?: {
-    [Event in keyof ClientEvents]?: ((
-      ...args: ClientEvents[Event]
-    ) => Promise<any> | any)[];
+    [EventName in keyof ClientEvents]?: PluginEventListener<EventName>;
   };
 };
 
@@ -39,10 +42,10 @@ export interface PluginConfig {
   events?: PluginEvents;
 }
 
-export interface PluginDeclaration {
-  id: string;
-  name: string;
+export type PluginSetup = (bot: Bot) => PluginConfig;
 
+export interface PluginDeclaration {
+  name: string;
   events: PluginEvents;
 }
 
@@ -50,14 +53,37 @@ export interface PluginDeclaration {
  * Plugin class, used to create plugins
  */
 export class Plugin implements PluginDeclaration {
-  public id: string;
   public name: string;
-
   public events: PluginEvents;
 
   constructor(config: PluginConfig) {
-    this.id = randomUUID();
     this.name = config.name;
     this.events = config.events ?? {};
   }
+
+  public iterateThroughListeners(
+    callback: <EventName extends keyof ClientEvents>(
+      eventType: EventTypes,
+      eventName: EventName,
+      listener: PluginEventListener<EventName>
+    ) => any
+  ) {
+    Object.entries(this.events).forEach(([eventType, listeners]) =>
+      Object.entries(listeners).forEach(([eventName, listener]) => {
+        callback(
+          eventType as EventTypes,
+          eventName as keyof ClientEvents,
+          listener as PluginEventListenerNotGeneric
+        );
+      })
+    );
+  }
+
+  public toJSON() {
+    return this as PluginDeclaration;
+  }
 }
+
+export const createPlugin = (config: (bot: Bot) => PluginConfig) => {
+  return config;
+};
