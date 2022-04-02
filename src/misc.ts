@@ -1,4 +1,4 @@
-export class TimeStamp {
+export class Timestamp {
   private time: number;
 
   constructor() {

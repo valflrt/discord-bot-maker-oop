@@ -10,7 +10,7 @@ import { BotSettings, BotSettingsConfig } from "./BotSettings";
 
 import commandHandlingPLugin from "./default/commandHandlingPLugin";
 
-import { TimeStamp } from "./misc";
+import { Timestamp } from "./misc";
 import { AnyObject } from "./types";
 
 export interface BotConfig {
@@ -60,7 +60,7 @@ export class Bot {
 
   public async start() {
     console.log("Connecting...");
-    let timestamp = new TimeStamp();
+    let timestamp = new Timestamp();
     await this.client.login(this.token);
     console.log(`Successfully connected (in ${timestamp.elapsedTime}ms)`);
 
