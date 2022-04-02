@@ -10,4 +10,10 @@ Directly use npm install with the url of this repository:
 npm i git+https://github.com/valflrt/discord-bot-oop.git
 ```
 
+<!--
+```
+npm i "git+https://github.com/valflrt/discord-bot-oop.git#build"
+```
+-->
+
 The package is installed !
