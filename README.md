@@ -12,7 +12,7 @@ npm i git+https://github.com/valflrt/discord-bot-oop.git
 
 <!--
 ```
-npm i "git+https://github.com/valflrt/discord-bot-oop.git#build" --save
+npm i "git+https://github.com/valflrt/discord-bot-oop.git#build"
 ```
 -->
 
