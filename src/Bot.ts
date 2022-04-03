@@ -10,18 +10,23 @@ import { BotSettings, BotSettingsConfig } from "./BotSettings";
 
 import commandHandlingPLugin from "./default/commandHandlingPLugin";
 
+import { LogSequences, LogSequencesDeclaration } from "./log/LogSequences";
+
 import { Timestamp } from "./misc";
 import { AnyObject } from "./types";
 
 export interface BotConfig {
   token: string;
   settings: BotSettingsConfig;
+
   constants?: AnyObject;
 
   intents: IntentsString[];
 
   commands?: CommandConfig[];
   plugins?: PluginSetup[];
+
+  logSequences?: LogSequencesDeclaration;
 }
 
 export class Bot {
@@ -35,6 +40,8 @@ export class Bot {
 
   public commandManager: CommandManager;
   public pluginManager: PluginManager;
+
+  public logSequences: LogSequences;
 
   constructor(config: BotConfig) {
     this.token = config.token;
@@ -56,20 +63,29 @@ export class Bot {
         : [commandHandlingPLugin],
       bot: this,
     });
+
+    this.logSequences = new LogSequences(config.logSequences ?? {});
   }
 
   public async start() {
-    console.log("Connecting...");
-    let timestamp = new Timestamp();
-    await this.client.login(this.token);
-    console.log(`Successfully connected (in ${timestamp.elapsedTime}ms)`);
+    let startupTS = new Timestamp();
+    let stepsTS = new Timestamp();
 
-    console.log("Waiting for the bot to be ready...");
-    timestamp.reset();
+    this.logSequences.STARTING();
+
+    this.logSequences.CONNECTING();
+    stepsTS.reset();
+    await this.client.login(this.token);
+    this.logSequences.CONNECTED(stepsTS.elapsedTime);
+
+    this.logSequences.READYING();
+    stepsTS.reset();
     await new Promise((r) => this.client.on("ready", r));
-    console.log(`The bot is now ready (took ${timestamp.elapsedTime}ms)`);
+    this.logSequences.READY(stepsTS.elapsedTime);
 
     await this.pluginManager.setupClient(this.client);
-    console.log(`Loaded plugins !`);
+    this.logSequences.PLUGINS_LOADED();
+
+    this.logSequences.STARTED(startupTS.elapsedTime);
   }
 }
