@@ -3,11 +3,31 @@ name: build
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: build
+          token: ${{ env.GH_TOKEN }}
+
+      - name: Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Remove useless files and folders
+        run: rm -rf ./src/ ./README.md tsconfig.json ./.github ./.vscode
+
+      - name: Push
+        run: git config --local user.name valflrt
+          git config --local user.email vfleurit@gmail.com
+          git add *
+          git stage *
+          git commit -m "Automated build"
+          git push
