@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
+          always-auth: true
+          scope: "@valflrt"
 
       - name: Git setup
         run: |
@@ -27,15 +29,6 @@ jobs:
         run: |
           npm ci
           npm run build
-
-      - name: Add `build/` to `main` branch
-        run: |
-          git add ./build/*
-          git commit -m "Automated build (github workflow)" -a
-          git push
-
-      - name: npm ci
-        run: npm ci
 
       - name: Publish to npm
         run: npm publish --access private
