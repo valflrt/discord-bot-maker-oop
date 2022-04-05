@@ -15,3 +15,55 @@ jobs:
           fetch-depth: 0
           ref: main
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup git
+        run: |
+          git config --local user.name valflrt
+          git config --local user.email vfleurit@gmail.com
+
+      - name: Build
+        run: |
+          npm install
+          npm run build
+
+      - name: Push changes to `main` branch
+        run: |
+          git add ./build/*
+          git commit -m "Automated build (github workflow)" -a
+          git push
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Git setup
+        run: |
+          git config --local user.name valflrt
+          git config --local user.email vfleurit@gmail.com
+
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Add `build/` to `main` branch
+        run: |
+          git add ./build/*
+          git commit -m "Automated build (github workflow)" -a
+          git push
+
+      - name: npm ci
+        run: npm ci
+
+      - name: Publish to npm
+        run: npm publish --access private
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
