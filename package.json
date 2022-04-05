@@ -1,5 +1,5 @@
 {
-  "name": "@valflrt/discord-bot-oop",
+  "name": "@valflrt/discord-bot-maker-oop",
   "version": "1.0.0",
   "description": "Simple oop discord bot manager",
   "main": "./build/index.js",
