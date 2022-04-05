@@ -31,6 +31,6 @@ jobs:
           npm run build
 
       - name: Publish to npm
-        run: npm publish --access private
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
