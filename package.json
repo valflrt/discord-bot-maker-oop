@@ -5,8 +5,7 @@
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "scripts": {
-    "build": "npx tsc",
-    "preinstall": "npm run build"
+    "build": "npx tsc"
   },
   "repository": {
     "type": "git",
