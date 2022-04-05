@@ -9,12 +9,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Set up git (checkout to main)
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           ref: main
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup git
+        run: |
+          git config --local user.name valflrt
+          git config --local user.email vfleurit@gmail.com
 
       - name: Build
         run: |
@@ -22,13 +27,14 @@ jobs:
           npm run build
 
       - name: Remove useless files and folders
-        run: rm -rf ./src/ ./README.md tsconfig.json ./.github ./.vscode
+        run: rm -rf ./src/ ./README.md tsconfig.json ./.github ./.vscode ./.gitignore
+
+      - name: Checkout to `build` branch
+        run: |
+          git checkout -B build
 
       - name: Push
         run: |
-          git config --local user.name valflrt
-          git config --local user.email vfleurit@gmail.com
-          git checkout -B build
           git add *
           git stage *
           git commit -m "Automated build"
