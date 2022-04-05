@@ -26,14 +26,21 @@ jobs:
           npm install
           npm run build
 
-      - name: Remove useless files and folders
-        run: rm -rf ./src/ ./README.md tsconfig.json ./.github ./.vscode ./.gitignore
+      - name: Push changes to `main` branch
+        run: |
+          git add *
+          git stage *
+          git commit -m "Automated build"
+          git push
 
       - name: Checkout to `build` branch
         run: |
           git checkout -B build
 
-      - name: Push
+      - name: Remove useless files and folders (`build` branch)
+        run: rm -rf ./src/ ./node_modules/ ./README.md tsconfig.json ./.github ./.vscode ./.gitignore
+
+      - name: Push changes to `build` branch
         run: |
           git add *
           git stage *
