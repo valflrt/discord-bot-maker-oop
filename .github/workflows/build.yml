@@ -20,6 +20,7 @@ jobs:
         run: |
           git config --local user.name valflrt
           git config --local user.email vfleurit@gmail.com
+          git config --local advice.addIgnoredFile false
 
       - name: Build
         run: |
