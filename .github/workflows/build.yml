@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up git (checkout to main)
+      - name: Checkout (branch `main`)
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -20,7 +20,6 @@ jobs:
         run: |
           git config --local user.name valflrt
           git config --local user.email vfleurit@gmail.com
-          git config --local advice.addIgnoredFile false
 
       - name: Build
         run: |
@@ -29,12 +28,11 @@ jobs:
 
       - name: Push changes to `main` branch
         run: |
-          git add *
-          git stage *
-          git commit -m "Automated build"
+          git add ./build/*
+          git commit -a "Automated build"
           git push
 
-      - name: Checkout to `build` branch
+      - name: Checkout (branch `build`)
         run: |
           git checkout -B build
 
@@ -43,7 +41,6 @@ jobs:
 
       - name: Push changes to `build` branch
         run: |
-          git add *
-          git stage *
-          git commit -m "Automated build"
+          git add ./build/*
+          git commit -a -m "Automated build"
           git push
