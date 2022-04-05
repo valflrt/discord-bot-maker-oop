@@ -9,32 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout (branch `main`)
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: main
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Setup git
-        run: |
-          git config --local user.name valflrt
-          git config --local user.email vfleurit@gmail.com
-
-      - name: Build
-        run: |
-          npm install
-          npm run build
-
-      - name: Push changes to `main` branch
-        run: |
-          git add ./build/*
-          git commit -m "Automated build (github workflow)" -a
-          git push
-  publish:
-    runs-on: ubuntu-latest
-
-    steps:
       - name: Checkout
         uses: actions/checkout@v3
 
