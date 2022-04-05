@@ -15,32 +15,3 @@ jobs:
           fetch-depth: 0
           ref: main
           token: ${{ secrets.GH_TOKEN }}
-
-      - name: Setup git
-        run: |
-          git config --local user.name valflrt
-          git config --local user.email vfleurit@gmail.com
-
-      - name: Build
-        run: |
-          npm install
-          npm run build
-
-      - name: Push changes to `main` branch
-        run: |
-          git add ./build/*
-          git commit -m "Automated build" -a
-          git push
-
-      - name: Checkout (branch `build`)
-        run: |
-          git checkout -B build
-
-      - name: Remove useless files and folders (`build` branch)
-        run: rm -rf ./src/ ./node_modules/ ./README.md tsconfig.json ./.github ./.vscode ./.gitignore
-
-      - name: Push changes to `build` branch
-        run: |
-          git add ./build/*
-          git commit -m "Automated build" -a
-          git push --set-upstream origin build
