@@ -25,7 +25,8 @@ jobs:
         run: rm -rf ./src/ ./README.md tsconfig.json ./.github ./.vscode
 
       - name: Push
-        run: git config --local user.name valflrt
+        run: |
+          git config --local user.name valflrt
           git config --local user.email vfleurit@gmail.com
           git checkout -B build
           git add *
