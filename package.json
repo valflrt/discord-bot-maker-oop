@@ -2,8 +2,8 @@
   "name": "@valflrt/discord-bot-maker-oop",
   "version": "1.0.0",
   "description": "Simple oop discord bot manager",
-  "main": "./src/index.js",
-  "types": "./src/index.d.ts",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "scripts": {
     "build": "npx tsc"
   },
