@@ -1,7 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import { Bot } from "../src/Bot";
 
-import config from "./_config.json";
+import config from "./_config";
 
 import commands from "./commands";
 
