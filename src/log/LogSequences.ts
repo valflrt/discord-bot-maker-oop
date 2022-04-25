@@ -20,10 +20,11 @@ export class LogSequences implements RequiredLogSequencesDeclaration {
   public PLUGINS_LOADED: () => any;
 
   constructor(declaration: LogSequencesDeclaration) {
-    this.STARTING = declaration.STARTING ?? (() => console.log("Starting..."));
+    this.STARTING =
+      declaration.STARTING ?? (() => console.log("› Starting..."));
     this.STARTED =
       declaration.STARTED ??
-      ((timeSpent) => console.log(`\nStarted ! (in ${timeSpent}ms)\n`));
+      ((timeSpent) => console.log(`\n› Started ! (in ${timeSpent}ms)\n`));
     this.CONNECTING =
       declaration.CONNECTING ?? (() => console.log("  - Connecting..."));
     this.CONNECTED =
